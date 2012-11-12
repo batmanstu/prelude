@@ -35,7 +35,7 @@
 (require 'cl)
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
 ;; required because of a package.el bug
@@ -43,13 +43,18 @@
 
 (defvar prelude-packages
   '(ack-and-a-half exec-path-from-shell expand-region gist guru-mode helm helm-projectile magit magithub melpa
-                   rainbow-mode volatile-highlights yasnippet solarized-theme zenburn-theme)
+		   rainbow-mode volatile-highlights yasnippet solarized-theme zenburn-theme
+;following added by batmanstu
+ prelude-c prelude-clojure prelude-common-lisp prelude-css prelude-emacs-lisp
+		   prelude-erlang prelude-haskell prelude-js prelude-latex prelude-lisp
+		   prelude-perl prelude-programming prelude-python prelude-ruby
+		   prelude-scala prelude-scheme prelude-xml)
   "A list of packages to ensure are installed at launch.")
 
 (defun prelude-packages-installed-p ()
   (loop for p in prelude-packages
-        when (not (package-installed-p p)) do (return nil)
-        finally (return t)))
+	when (not (package-installed-p p)) do (return nil)
+	finally (return t)))
 
 (defun prelude-install-packages ()
   (unless (prelude-packages-installed-p)
@@ -60,16 +65,16 @@
     ;; install the missing packages
     (dolist (p prelude-packages)
       (unless (package-installed-p p)
-        (package-install p)))))
+	(package-install p)))))
 
 (prelude-install-packages)
 
 (defmacro prelude-auto-install (extension package mode)
   `(add-to-list 'auto-mode-alist
-                `(,extension . (lambda ()
-                                 (unless (package-installed-p ',package)
-                                   (package-install ',package))
-                                 (,mode)))))
+		`(,extension . (lambda ()
+				 (unless (package-installed-p ',package)
+				   (package-install ',package))
+				 (,mode)))))
 
 (defvar prelude-auto-install-alist
   '(("\\.clj\\'" prelude-clojure clojure-mode)
@@ -107,8 +112,8 @@
 
 (dolist (entry prelude-auto-install-alist)
   (let ((extension (first entry))
-        (package (second entry))
-        (mode (third entry)))
+	(package (second entry))
+	(mode (third entry)))
     (unless (package-installed-p package)
       (prelude-auto-install extension package mode))))
 

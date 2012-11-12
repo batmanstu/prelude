@@ -33,6 +33,11 @@
 
 ;;; Code:
 
+
+;;Environment customizations
+(setenv "PATH" (concat "~/bin:/opt/local/bin" (getenv "PATH")))
+(setq exec-path (append exec-path '("~/bin:/opt/local/bin")))
+
 (message "Prelude is powering up... Be patient, Master %s!" (getenv "USER"))
 
 (defvar prelude-dir (file-name-directory load-file-name)
